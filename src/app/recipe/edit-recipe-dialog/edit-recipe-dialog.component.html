@@ -1,0 +1,180 @@
+<div class="main">
+  <div class="container">
+    <div class="buttons">
+      <div>
+        <button
+          mat-raised-button
+          color="primary"
+          class="btn"
+          type="submit"
+          (click)="onBackToMyRecipe()"
+        >
+          <span>Back</span>
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+      </div>
+      <div>
+        <button
+          mat-raised-button
+          color="primary"
+          class="btn"
+          type="submit"
+          (click)="onBackToRecipe()"
+        >
+          <span>All Recipe</span>
+          <mat-icon>book</mat-icon>
+        </button>
+      </div>
+    </div>
+    <h2 class="heading">Edit Recipe</h2>
+    <form class="form" [formGroup]="recipeForm" (ngSubmit)="submitRecipe()">
+      <mat-form-field appearance="outline">
+        <mat-label>Title</mat-label>
+        <input matInput formControlName="title" />
+        <mat-error
+          *ngIf="
+            recipeForm.get('title')?.invalid && recipeForm.get('title')?.touched
+          "
+        >
+          Please enter title.
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Source URL</mat-label>
+        <input matInput formControlName="sourceUrl" />
+        <mat-error
+          *ngIf="
+            recipeForm.get('sourceUrl')?.invalid &&
+            recipeForm.get('sourceUrl')?.touched
+          "
+        >
+          Please enter sourceUrl.
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="example-form-field">
+        <mat-label>Tags</mat-label>
+        <mat-chip-grid #chipGrid aria-label="Tags list">
+          <mat-chip-row
+            *ngFor="let tagCtrl of tags.controls; let i = index"
+            (removed)="removeTag(i)"
+          >
+            {{ tagCtrl.value }}
+            <button matChipRemove>
+              <mat-icon>cancel</mat-icon>
+            </button>
+          </mat-chip-row>
+        </mat-chip-grid>
+        <input
+          placeholder="New tag..."
+          [matChipInputFor]="chipGrid"
+          [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+          (matChipInputTokenEnd)="addTag($event)"
+        />
+      </mat-form-field>
+
+      <mat-radio-group formControlName="imageType">
+        <mat-radio-button value="url">Image URL</mat-radio-button>
+        <mat-radio-button value="file">Upload Image</mat-radio-button>
+      </mat-radio-group>
+
+      <ng-container *ngIf="recipeForm.get('imageType')?.value === 'url'">
+        <mat-form-field appearance="outline">
+          <mat-label>Image URL</mat-label>
+          <input matInput formControlName="image" />
+          <mat-error
+            *ngIf="
+              recipeForm.get('image')?.invalid &&
+              recipeForm.get('image')?.touched
+            "
+          >
+            Please enter image Url.
+          </mat-error>
+        </mat-form-field>
+      </ng-container>
+
+      <ng-container *ngIf="recipeForm.get('imageType')?.value === 'file'">
+        <div
+          class="image-upload-box"
+          (drop)="onDrop($event)"
+          (dragover)="onDragOver($event)"
+        >
+          <ng-container *ngIf="imagePreview; else uploadPlaceholder">
+            <img [src]="imagePreview" alt="Image preview" class="preview-img" />
+            <button
+              mat-stroked-button
+              color="warn"
+              type="button"
+              (click)="removeImage()"
+            >
+              Remove
+            </button>
+          </ng-container>
+          <ng-template #uploadPlaceholder>
+            <mat-icon class="upload-icon">cloud_upload</mat-icon>
+            <p>Drag & Drop or Click to Upload</p>
+            <button
+              mat-raised-button
+              color="accent"
+              type="button"
+              (click)="fileInput.click()"
+            >
+              Browse
+            </button>
+            <input
+              #fileInput
+              type="file"
+              (change)="uploadImage($event)"
+              hidden
+              accept="image/*"
+            />
+          </ng-template>
+        </div>
+        <mat-error
+          *ngIf="
+            recipeForm.get('image')?.invalid && recipeForm.get('image')?.touched
+          "
+        >
+          Please enter image.
+        </mat-error>
+      </ng-container>
+
+      <div class="ingredient" formArrayName="ingredients">
+        <span class="ingredient__heading">Ingredients:</span>
+
+        <div
+          *ngFor="let ing of ingredients.controls; let i = index"
+          [formGroupName]="i"
+          class="ingredient__list"
+        >
+          <mat-form-field class="ingredient__list__name" appearance="outline">
+            <mat-label>Name</mat-label>
+            <input matInput formControlName="name" />
+          </mat-form-field>
+          <mat-form-field class="ingredient__list__unit" appearance="outline">
+            <mat-label>Quantity</mat-label>
+            <input matInput type="number" formControlName="quantity" />
+          </mat-form-field>
+          <mat-form-field class="ingredient__list__unit" appearance="outline">
+            <mat-label>Unit</mat-label>
+            <input matInput formControlName="unit" />
+          </mat-form-field>
+        </div>
+
+        <button
+          class="ingredient__btn"
+          mat-button
+          type="button"
+          (click)="addIngredient()"
+        >
+          Add Ingredient
+        </button>
+      </div>
+
+      <button mat-raised-button color="primary" type="submit">
+        Submit Recipe
+      </button>
+    </form>
+  </div>
+</div>

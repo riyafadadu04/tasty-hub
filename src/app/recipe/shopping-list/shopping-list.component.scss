@@ -1,0 +1,182 @@
+@import "../../../styles.scss";
+
+.main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  padding: 6.4rem 0;
+  width: 100vw;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 1.2rem;
+  width: 80%;
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 2.6rem 0 0 0;
+    .heading {
+      font-size: 2.5rem;
+      text-align: center;
+      color: $color-secondary;
+      margin-bottom: 2rem;
+    }
+    button {
+      font-size: 1.2rem;
+      padding: 1rem 2rem;
+    }
+  }
+
+  .ingredien-add {
+    width: 100%;
+    border: 0.1rem solid #74777f;
+    border-radius: 0.5rem;
+    padding: 2.5rem 2rem 0 2rem;
+    position: relative;
+    margin-bottom: 2.5rem;
+
+    .ingredient-heading {
+      position: absolute;
+      color: #252525;
+      font-size: 1.2rem;
+      background: #fff;
+      padding: 0 0.5rem;
+      top: -1rem;
+      left: 2rem;
+    }
+  }
+
+  .ingredient-form {
+    display: flex;
+    gap: 1.2rem;
+    width: 100%;
+
+    mat-label {
+      font-size: 1.2rem;
+    }
+
+    mat-form-field {
+      margin-bottom: 1rem;
+
+      ::ng-deep .mat-mdc-form-field-infix {
+        margin: 0;
+        padding: 0;
+        display: flex;
+        align-items: center;
+      }
+
+      mat-error {
+        font-size: 1rem;
+      }
+
+      input {
+        font-size: 1.2rem;
+      }
+    }
+
+    &__name {
+      width: 50%;
+    }
+
+    &__unit {
+      width: 20%;
+    }
+
+    &__btn {
+      width: 10%;
+    }
+
+    button {
+      font-size: 1.2rem;
+      padding: 1rem 1.2rem;
+      margin-top: 0.8rem;
+    }
+  }
+
+  table {
+    border-collapse: separate;
+    border-spacing: 0;
+    border: 0.2rem solid $color-primary;
+    border-radius: 0.8rem;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+    thead tr:first-child th:first-child {
+      border-top-left-radius: 0.8rem;
+    }
+
+    thead tr:first-child th:last-child {
+      border-top-right-radius: 0.8rem;
+    }
+
+    tbody tr:last-child td:first-child {
+      border-bottom-left-radius: 0.8rem;
+    }
+
+    tbody tr:last-child td:last-child {
+      border-bottom-right-radius: 0.8rem;
+    }
+
+    mat-header-row,
+    mat-row {
+      display: table-row;
+    }
+
+    mat-icon {
+      color: $color-secondary;
+    }
+    th {
+      color: $color-secondary;
+      background: $color-primary;
+      font-size: 1.3rem;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    td {
+      background: $color-primary-light;
+      font-size: 1.3rem;
+      text-align: center;
+    }
+    .th-name {
+      width: 60rem;
+      text-align: left;
+    }
+    .td-left {
+      text-align: left;
+    }
+    .th-unit {
+      width: 25rem;
+    }
+    .th-action {
+      width: 20rem;
+    }
+    .table-input {
+      font-size: 1.3rem;
+    }
+
+    mat-form-field {
+      width: 90%;
+
+      ::ng-deep .mat-mdc-text-field-wrapper {
+        height: 3rem;
+        .mat-mdc-form-field-infix {
+          padding: 0.8rem 0;
+          margin: 0;
+        }
+      }
+
+      ::ng-deep .mat-mdc-form-field-subscript-wrapper,
+      .mat-mdc-form-field-bottom-align::before {
+        display: none;
+      }
+    }
+  }
+}

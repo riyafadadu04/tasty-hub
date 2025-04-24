@@ -1,0 +1,36 @@
+<div class="main">
+  <div class="container">
+    <h2 class="heading">My Recipes</h2>
+
+    <div *ngIf="isLoading" class="loader">
+      <mat-spinner diameter="60"></mat-spinner>
+    </div>
+
+    <div class="recipe-container" *ngIf="myRecipes.length && !isLoading">
+      <div
+        *ngFor="let recipe of recipeData"
+        class="recipe"
+        (click)="viewRecipeDetail(recipe.id)"
+      >
+        <img class="recipe__image" [src]="recipe.imageUrl" alt="" />
+        <div class="recipe__title">
+          <div class="recipe__title__name">{{ recipe.title }}</div>
+          <div class="recipe__title__action">
+            <button (click)="editRecipe(recipe); $event.stopPropagation()">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button (click)="deleteRecipe(recipe.id); $event.stopPropagation()">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="add__button">
+    <button class="add__button__btn" (click)="onAddRecipe()">
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
+</div>

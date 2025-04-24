@@ -1,0 +1,22 @@
+<mat-toolbar class="header">
+  <div class="logo-mian">
+    <img src="assets/tastyHub-logo.png" alt="TastyHub" class="logo" />
+  </div>
+  <div class="nav" *ngIf="isLogin">
+    <button mat-button [routerLink]="['/recipe']">Recipe</button>
+    <button mat-button [routerLink]="['/shopping-list']">Shopping List</button>
+    <button mat-button [matMenuTriggerFor]="menu">
+      <mat-icon>person</mat-icon>
+    </button>
+    <mat-menu class="menu" #menu="matMenu">
+      <button mat-menu-item [routerLink]="['/add']">Add Recipe</button>
+      <button mat-menu-item [routerLink]="['/myRecipe']">My Recipe</button>
+      <button mat-menu-item [routerLink]="['/favorites']">Favorites</button>
+      <button mat-menu-item (click)="onLogout()">Logout</button>
+    </mat-menu>
+  </div>
+  <div class="nav" *ngIf="!isLogin">
+    <button mat-button [routerLink]="['/login']">Login</button>
+    <button mat-button [routerLink]="['/signup']">Signup</button>
+  </div>
+</mat-toolbar>

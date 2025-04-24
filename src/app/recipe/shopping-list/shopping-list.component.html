@@ -1,0 +1,139 @@
+<div class="main">
+  <div class="container">
+    <div class="header">
+      <h2 class="heading">My Shopping List</h2>
+      <button mat-raised-button (click)="toggleForm()">
+        {{ showForm ? "Cancel" : "Add Ingredient" }}
+      </button>
+    </div>
+
+    <div *ngIf="showForm" class="ingredien-add">
+      <span class="ingredient-heading">Ingredients:</span>
+      <form
+        class="form ingredient-form"
+        #form="ngForm"
+        (ngSubmit)="onAddIngredient()"
+      >
+        <mat-form-field class="ingredient-form__name" appearance="outline">
+          <mat-label>Name</mat-label>
+          <input
+            matInput
+            [(ngModel)]="ingredientForm.name"
+            name="name"
+            #nameInput="ngModel"
+            required
+          />
+          <mat-error *ngIf="nameInput.invalid && nameInput.touched">
+            Name is required.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="ingredient-form__unit" appearance="outline">
+          <mat-label>Quantity</mat-label>
+          <input
+            matInput
+            type="number"
+            [(ngModel)]="ingredientForm.quantity"
+            name="quantity"
+          />
+        </mat-form-field>
+
+        <mat-form-field class="ingredient-form__unit" appearance="outline">
+          <mat-label>Unit</mat-label>
+          <input matInput [(ngModel)]="ingredientForm.unit" name="unit" />
+        </mat-form-field>
+
+        <button
+          class="ingredient-form__btn"
+          mat-raised-button
+          color="primary"
+          type="submit"
+          [disabled]="form.invalid"
+        >
+          Add
+        </button>
+      </form>
+    </div>
+
+    <div *ngIf="ingredients?.length" class="ingredients-table-wrapper">
+      <table mat-table [dataSource]="ingredients" class="mat-elevation-z2">
+        <!-- Name Column -->
+        <ng-container matColumnDef="name">
+          <th class="th-name" mat-header-cell *matHeaderCellDef>Name</th>
+          <td class="td-left" mat-cell *matCellDef="let ing">
+            <ng-container *ngIf="editId !== ing.id; else editName">
+              {{ ing.name }}
+            </ng-container>
+            <ng-template #editName>
+              <mat-form-field appearance="outline" class="table-input">
+                <input matInput [(ngModel)]="editForm.name" name="editName" />
+              </mat-form-field>
+            </ng-template>
+          </td>
+        </ng-container>
+
+        <!-- Quantity Column -->
+        <ng-container matColumnDef="quantity">
+          <th class="th-unit" mat-header-cell *matHeaderCellDef>Quantity</th>
+          <td mat-cell *matCellDef="let ing">
+            <ng-container *ngIf="editId !== ing.id; else editQty">
+              {{ ing.quantity }}
+            </ng-container>
+            <ng-template #editQty>
+              <mat-form-field appearance="outline" class="table-input">
+                <input
+                  matInput
+                  type="number"
+                  [(ngModel)]="editForm.quantity"
+                  name="editQuantity"
+                />
+              </mat-form-field>
+            </ng-template>
+          </td>
+        </ng-container>
+
+        <!-- Unit Column -->
+        <ng-container matColumnDef="unit">
+          <th class="th-unit" mat-header-cell *matHeaderCellDef>Unit</th>
+          <td mat-cell *matCellDef="let ing">
+            <ng-container *ngIf="editId !== ing.id; else editUnit">
+              {{ ing.unit }}
+            </ng-container>
+            <ng-template #editUnit>
+              <mat-form-field appearance="outline" class="table-input">
+                <input matInput [(ngModel)]="editForm.unit" name="editUnit" />
+              </mat-form-field>
+            </ng-template>
+          </td>
+        </ng-container>
+
+        <!-- Actions Column -->
+        <ng-container matColumnDef="actions">
+          <th class="th-action" mat-header-cell *matHeaderCellDef>Actions</th>
+          <td mat-cell *matCellDef="let ing">
+            <ng-container *ngIf="editId !== ing.id; else editButtons">
+              <button mat-icon-button (click)="onEdit(ing)">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button (click)="removeIngredient(ing.id)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </ng-container>
+            <ng-template #editButtons>
+              <button mat-icon-button (click)="saveEdit(ing.id!)">
+                <mat-icon>save</mat-icon>
+              </button>
+              <button mat-icon-button (click)="cancelEdit()">
+                <mat-icon>close</mat-icon>
+              </button>
+            </ng-template>
+          </td>
+        </ng-container>
+
+        <!-- Table Header and Rows -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </div>
+  </div>
+</div>

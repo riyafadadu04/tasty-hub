@@ -1,0 +1,88 @@
+<div class="main">
+  <div *ngIf="isLoading" class="loader">
+    <mat-spinner diameter="60"></mat-spinner>
+  </div>
+  <div class="container" *ngIf="recipe && !isLoading">
+    <button
+      mat-raised-button
+      color="primary"
+      class="btn"
+      type="submit"
+      (click)="onBack()"
+    >
+      <span>Back</span>
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <div class="recipe">
+      <div class="recipe__image">
+        <img
+          class="recipe__image__img"
+          [src]="recipe.imageUrl"
+          alt="Recipe Image"
+        />
+      </div>
+
+      <h2 class="heading">{{ recipe.title }}</h2>
+
+      <div class="recipe__tags">
+        <span *ngFor="let tag of recipe.tags" class="recipe__tags__tag">
+          {{ tag }}
+        </span>
+      </div>
+
+      <div class="recipe__ingredient">
+        <div class="recipe__title__row">
+          <h2 class="recipe__title">Ingredients</h2>
+
+          <div class="recipe__ingredient__servings">
+            <mat-icon class="mat-icon-grp">group</mat-icon>
+            <mat-icon class="mat-icon-circle" (click)="adjustServings(-1)"
+              >remove_circle_outline</mat-icon
+            >
+            <span class="servings">{{ servings }}</span>
+            <mat-icon class="mat-icon-circle" (click)="adjustServings(1)"
+              >add_circle_outline</mat-icon
+            >
+          </div>
+        </div>
+
+        <div class="recipe__ingredient__ing">
+          <div
+            class="recipe__ingredient__ing--item"
+            *ngFor="let ing of recipe.ingredients"
+          >
+            <mat-icon>check</mat-icon>
+            <span class="name">{{ ing.name }}</span>
+            <span class="name" *ngIf="ing.quantity">
+              - {{ adjustedQuantity(ing.quantity) }}
+            </span>
+            <span *ngIf="ing.unit">
+              {{ ing.unit }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h2 class="recipe__title">How to cook it</h2>
+        <p class="recipe__detail">
+          This recipe was carefully designed and tested by The
+          <strong>{{ recipe.publisher }}</strong
+          >. Please check out directions at their website.
+        </p>
+        <div class="recipe__btn__row">
+          <button
+            mat-raised-button
+            color="primary"
+            class="btn"
+            type="submit"
+            (click)="onDirection(recipe.sourceUrl)"
+          >
+            <span>Direction</span>
+            <mat-icon>arrow_forward</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

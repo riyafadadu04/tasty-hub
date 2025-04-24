@@ -1,0 +1,139 @@
+@import "../../../styles.scss";
+
+.main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  padding: 6.4rem 0;
+}
+.container {
+  width: 60%;
+  padding: 2rem;
+  overflow-y: auto;
+
+  .heading {
+    font-size: 2.5rem;
+    text-align: center;
+    color: $color-secondary;
+    margin-bottom: 2rem;
+  }
+
+  .recipe {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    &__title {
+      font-size: 2rem;
+      color: $color-secondary;
+      margin: 1rem 0;
+
+      &__row {
+        display: flex;
+        gap: 5rem;
+        justify-content: space-between;
+        margin-bottom: 1rem;
+      }
+    }
+
+    &__image {
+      width: 100%;
+      height: 60rem;
+      &__img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+
+    &__tags {
+      display: flex;
+      gap: 0.5rem;
+
+      &__tag {
+        background: $color-secondary;
+        color: #f2f2f2;
+        padding: 1rem 1.5rem;
+        border-radius: 1.5rem;
+      }
+    }
+
+    &__ingredient {
+      &__servings {
+        display: flex;
+        align-items: center;
+        .mat-icon-grp {
+          color: $color-secondary;
+          width: 4rem;
+          height: 3rem;
+          font-size: 3rem;
+          margin-right: 0.5rem;
+        }
+        .mat-icon-circle {
+          color: $color-secondary;
+          font-size: 2.5rem;
+        }
+        .servings {
+          font-size: 2rem;
+          font-weight: 500;
+          margin: 1rem;
+        }
+      }
+
+      &__ing {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        column-gap: 1rem;
+        row-gap: 0.5rem;
+
+        &--item {
+          display: flex;
+          align-items: center;
+          font-size: 1.4rem;
+        }
+
+        mat-icon {
+          color: $color-secondary;
+          margin-right: 1rem;
+        }
+
+        .name {
+          margin-right: 0.5rem;
+        }
+      }
+    }
+
+    &__detail {
+      font-size: 1.4rem;
+      margin-bottom: 2rem;
+    }
+
+    &__btn__row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+  .btn {
+    padding: 1rem 3rem;
+    font-size: 1.3rem;
+    margin-bottom: 2rem;
+
+    mat-icon {
+      width: 2rem;
+      height: auto;
+      font-size: 1.6rem;
+    }
+  }
+}
+.loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+
+  ::ng-deep .custom-spinner circle {
+    stroke: $color-secondary !important;
+  }
+}

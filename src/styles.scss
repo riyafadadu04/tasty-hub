@@ -1,1 +1,29 @@
 /* You can add global styles to this file, and also import other style files */
+$color-primary-light: #faf9fd;
+$color-primary: #d7e3ff;
+$color-secondary: #034184;
+* {
+  margin: 0;
+  padding: 0;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+html {
+  box-sizing: border-box;
+  font-size: 62.5%;
+}
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  background: $color-primary-light;
+}

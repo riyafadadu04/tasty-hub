@@ -1,0 +1,92 @@
+<div class="main">
+  <div class="container">
+    <h2 class="heading">Recipe</h2>
+    <div
+      class="filter"
+      style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap"
+    >
+      <!-- 🔍 Search Input -->
+      <mat-form-field appearance="outline" class="filter__search">
+        <mat-label>Search by title or tag</mat-label>
+        <input matInput [(ngModel)]="searchQuery" (input)="applyFilters()" />
+      </mat-form-field>
+
+      <!-- ⬇️ Sort Dropdown -->
+      <mat-form-field appearance="outline" class="filter__sort">
+        <mat-label>Sort By</mat-label>
+        <mat-select [(ngModel)]="sortOption" (selectionChange)="applyFilters()">
+          <mat-option value="">None</mat-option>
+          <mat-option value="likes">Most Liked</mat-option>
+          <mat-option value="newest">Newest</mat-option>
+          <mat-option value="oldest">Oldest</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div *ngIf="isLoading" class="loader">
+      <mat-spinner diameter="60"></mat-spinner>
+    </div>
+
+    <div *ngIf="!isLoading" class="recipe-container">
+      <div *ngFor="let data of paginatedRecipes">
+        <div class="recipe" (click)="viewRecipeDetail(data.id)">
+          <img class="recipe__image" [src]="data.imageUrl" alt="" />
+
+          <div class="recipe__title">
+            <div class="recipe__title__name">{{ data.title }}</div>
+            <div class="recipe__title__likes">
+              <mat-icon
+                class="like-button"
+                [style.color]="isFavorite(data.id) ? 'red' : 'gray'"
+                (click)="toggleLike(data, $event)"
+              >
+                {{ isFavorite(data.id) ? "favorite" : "favorite_border" }}
+              </mat-icon>
+              {{ data.likes }}
+            </div>
+          </div>
+
+          <div class="recipe__tags">
+            <span
+              *ngFor="let tag of data.tags.slice(0, 2)"
+              class="recipe__tags__tag"
+            >
+              {{ tag }}
+            </span>
+            <span
+              *ngIf="data.tags.length > 2"
+              class="recipe__tags__tag recipe__tags__tag--more"
+            >
+              +{{ data.tags.length - 2 }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination" *ngIf="totalPages > 1">
+      <button
+        (click)="changePage(currentPage - 1)"
+        [disabled]="currentPage === 1"
+      >
+        Previous
+      </button>
+
+      <button
+        *ngFor="let page of getPageArray()"
+        (click)="changePage(page)"
+        [class.active]="currentPage === page"
+      >
+        {{ page }}
+      </button>
+
+      <button
+        (click)="changePage(currentPage + 1)"
+        [disabled]="currentPage === totalPages"
+      >
+        Next
+      </button>
+    </div>
+  </div>
+</div>

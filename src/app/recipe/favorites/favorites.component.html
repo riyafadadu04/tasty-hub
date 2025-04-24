@@ -1,0 +1,76 @@
+<div class="main">
+  <div class="container">
+    <h2 class="heading">Favorite Recipes</h2>
+
+    <div class="recipe-container" *ngIf="paginatedRecipes.length; else noFavs">
+      <div
+        *ngFor="let data of paginatedRecipes"
+        (click)="viewRecipeDetail(data.id)"
+      >
+        <div class="recipe">
+          <img class="recipe__image" [src]="data.imageUrl" alt="" />
+
+          <div class="recipe__title">
+            <div class="recipe__title__name">{{ data.title }}</div>
+            <div class="recipe__title__likes">
+              <mat-icon
+                matTooltip="Click to remove from favorites"
+                class="like-button"
+                [style.color]="isFavorite(data.id) ? 'red' : 'gray'"
+                (click)="toggleLike(data)"
+              >
+                {{ isFavorite(data.id) ? "favorite" : "favorite_border" }}
+              </mat-icon>
+              {{ data.likes }}
+            </div>
+          </div>
+
+          <div class="recipe__tags">
+            <span
+              *ngFor="let tag of data.tags.slice(0, 2)"
+              class="recipe__tags__tag"
+            >
+              {{ tag }}
+            </span>
+            <span
+              *ngIf="data.tags.length > 2"
+              class="recipe__tags__tag recipe__tags__tag--more"
+            >
+              +{{ data.tags.length - 2 }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- No Favorites Message -->
+    <ng-template #noFavs>
+      <div class="loader"><mat-spinner diameter="60"></mat-spinner></div>
+    </ng-template>
+
+    <!-- Pagination -->
+    <div class="pagination" *ngIf="totalPages > 1">
+      <button
+        (click)="changePage(currentPage - 1)"
+        [disabled]="currentPage === 1"
+      >
+        Previous
+      </button>
+
+      <button
+        *ngFor="let page of getPageArray()"
+        (click)="changePage(page)"
+        [class.active]="currentPage === page"
+      >
+        {{ page }}
+      </button>
+
+      <button
+        (click)="changePage(currentPage + 1)"
+        [disabled]="currentPage === totalPages"
+      >
+        Next
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,73 @@
+@import "../../../styles.scss";
+
+.main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  padding: 6.4rem 0;
+  height: 100vh;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 1.2rem;
+  height: 100%;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  width: 60rem;
+  background-color: #ffffffc7;
+  box-shadow: 0 0 2rem 0 rgba($color-secondary, 0.1);
+  padding: 2.5rem;
+  border-radius: 1rem;
+
+  .heading {
+    font-size: 2.5rem;
+    text-align: center;
+    color: $color-secondary;
+    margin-bottom: 2rem;
+  }
+
+  mat-label {
+    font-size: 1.2rem;
+  }
+
+  mat-form-field {
+    margin-bottom: 1rem;
+
+    ::ng-deep .mat-mdc-form-field-infix {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+    }
+
+    mat-error {
+      font-size: 0.8rem;
+    }
+
+    input {
+      font-size: 1.2rem;
+    }
+  }
+
+  button {
+    font-size: 1.2rem;
+  }
+}
+
+.link-row {
+  font-size: 1.2rem;
+  padding: 1rem;
+
+  .link {
+    color: $color-secondary;
+  }
+}

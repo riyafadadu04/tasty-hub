@@ -1,0 +1,59 @@
+@import "../../styles.scss";
+
+mat-toolbar {
+  padding: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
+  background: $color-primary;
+  z-index: 100;
+
+  button {
+    color: $color-secondary;
+    font-size: 1.2rem;
+    padding: 1rem 1.2rem;
+
+    mat-icon {
+      width: 2rem;
+      height: auto;
+      font-size: 2rem;
+    }
+  }
+
+  .logo-mian {
+    width: 7.5rem;
+    height: auto;
+    .logo {
+      width: 100%;
+      height: 100%;
+      padding: 0;
+      margin: 0;
+    }
+  }
+}
+
+::ng-deep .mat-mdc-menu-panel {
+  background: $color-primary-light;
+  border-radius: 12px;
+  padding: 0.5rem 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  min-width: 20rem;
+}
+
+::ng-deep .mat-mdc-menu-item {
+  font-size: 1.2rem;
+  color: $color-primary;
+  padding: 1rem 1.5rem;
+  transition: all 0.3s ease;
+  min-height: 2rem;
+
+  &:hover {
+    background: lighten($color-primary, 40%);
+    color: $color-secondary;
+  }
+
+  .mat-icon {
+    margin-right: 0.5rem;
+  }
+}
