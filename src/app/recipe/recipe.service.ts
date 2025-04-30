@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Ingredient, Recipe } from './recipe.model';
-import { map, switchAll, switchMap } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 
 @Injectable({
@@ -58,7 +58,6 @@ export class RecipeService {
   deleteRecipe(recipeId: string, userId: string): Observable<any> {
     return this.http.delete(`${this.dbUrl}/recipe/${recipeId}.json`).pipe(
       map(() => {
-        // Remove recipeId from myrecipes in user data
         this.http
           .get<any>(`${this.dbUrl}/users/${userId}.json`)
           .subscribe((userData) => {
@@ -78,8 +77,14 @@ export class RecipeService {
     return this.http.get<Recipe>(`${this.dbUrl}/recipe/${recipeId}.json`).pipe(
       map((recipe) => ({
         ...recipe,
-        id: recipeId, // Manually attach the ID
+        id: recipeId,
       }))
+    );
+  }
+
+  getMyRecipes(userId: string): Observable<any> {
+    return this.http.get<{ myrecipes?: string[] }>(
+      `${this.dbUrl}/users/${userId}.json`
     );
   }
 
@@ -141,60 +146,45 @@ export class RecipeService {
   ): Observable<any> {
     const id = this.generateId();
     const ingredientWithId = { ...ingredient, id };
-    return this.http
-      .get<any>(`${this.dbUrl}/users/${userId}/shoppingList.json`)
-      .pipe(
-        switchMap((shoppingList) => {
-          const updatedList = shoppingList
-            ? [...shoppingList, ingredientWithId]
-            : [ingredientWithId];
-          return this.http.put(
-            `${this.dbUrl}/users/${userId}/shoppingList.json`,
-            updatedList
-          );
-        })
-      );
+    return this.http.put(
+      `${this.dbUrl}/users/${userId}/shoppingList/${id}.json`,
+      ingredientWithId
+    );
   }
 
   updateIngredientInShoppingList(
     userId: string,
     ingredient: Ingredient
   ): Observable<any> {
-    return this.http
-      .get<Ingredient[]>(`${this.dbUrl}/users/${userId}/shoppingList.json`)
-      .pipe(
-        switchMap((list = []) => {
-          const index = list.findIndex((ing) => ing.id === ingredient.id);
-          if (index !== -1) list[index] = ingredient;
-          return this.http.put(
-            `${this.dbUrl}/users/${userId}/shoppingList.json`,
-            list
-          );
-        })
-      );
+    return this.http.patch(
+      `${this.dbUrl}/users/${userId}/shoppingList/${ingredient.id}.json`,
+      ingredient
+    );
   }
 
   removeIngredientFromShoppingList(
     userId: string,
     ingredientId: string
   ): Observable<any> {
-    return this.http
-      .get<Ingredient[]>(`${this.dbUrl}/users/${userId}/shoppingList.json`)
-      .pipe(
-        switchMap((list = []) => {
-          const updatedList = list.filter((ing) => ing.id !== ingredientId);
-          return this.http.put(
-            `${this.dbUrl}/users/${userId}/shoppingList.json`,
-            updatedList
-          );
-        })
-      );
+    return this.http.delete(
+      `${this.dbUrl}/users/${userId}/shoppingList/${ingredientId}.json`
+    );
   }
 
   getShoppingList(userId: string): Observable<Ingredient[]> {
     return this.http
-      .get<Ingredient[]>(`${this.dbUrl}/users/${userId}/shoppingList.json`)
-      .pipe(map((res) => res || []));
+      .get<{ [key: string]: Ingredient }>(
+        `${this.dbUrl}/users/${userId}/shoppingList.json`
+      )
+      .pipe(
+        map((res) => {
+          if (!res) return [];
+          return Object.keys(res).map((key) => ({
+            ...res[key],
+            id: key,
+          }));
+        })
+      );
   }
 
   private generateId(): string {

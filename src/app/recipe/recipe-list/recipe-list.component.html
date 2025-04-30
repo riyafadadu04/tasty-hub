@@ -66,26 +66,40 @@
 
     <!-- Pagination -->
     <div class="pagination" *ngIf="totalPages > 1">
+      <button (click)="changePage(1)" [disabled]="currentPage === 1">
+        <mat-icon>first_page</mat-icon>
+      </button>
+
       <button
         (click)="changePage(currentPage - 1)"
         [disabled]="currentPage === 1"
       >
-        Previous
+        <mat-icon>keyboard_arrow_left</mat-icon>
       </button>
 
-      <button
-        *ngFor="let page of getPageArray()"
-        (click)="changePage(page)"
-        [class.active]="currentPage === page"
-      >
-        {{ page }}
-      </button>
+      <div *ngFor="let page of getPageArray() as pages; trackBy: trackByPage">
+        <div class="page-dots" *ngIf="page === '...'">{{ page }}</div>
+        <button
+          *ngIf="page !== '...'"
+          [class.active]="currentPage === page"
+          (click)="onPageClick(page)"
+        >
+          {{ page }}
+        </button>
+      </div>
 
       <button
         (click)="changePage(currentPage + 1)"
         [disabled]="currentPage === totalPages"
       >
-        Next
+        <mat-icon>keyboard_arrow_right</mat-icon>
+      </button>
+
+      <button
+        (click)="changePage(totalPages)"
+        [disabled]="currentPage === totalPages"
+      >
+        <mat-icon>last_page</mat-icon>
       </button>
     </div>
   </div>

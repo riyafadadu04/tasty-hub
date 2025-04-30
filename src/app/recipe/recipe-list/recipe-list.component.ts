@@ -70,48 +70,6 @@ export class RecipeListComponent implements OnInit {
         this.favorites = res?.favorites || [];
       });
     }
-
-    // this.recipeService.getRecipes().subscribe((existingRecipes) => {
-    //   const existingTitles = new Set(
-    //     existingRecipes.map((r) => r.title.trim().toLowerCase())
-    //   );
-
-    //   const incomingRecipes = this.getIncomingRecipes();
-
-    //   incomingRecipes.forEach((recipe, index) => {
-    //     if (!existingTitles.has(recipe.title.trim().toLowerCase())) {
-    //       setTimeout(() => {
-    //         const now = new Date();
-    //         const createdAt = `${now.toISOString().slice(0, 10)} ${now
-    //           .toTimeString()
-    //           .slice(0, 5)}`; // "YYYY-MM-DD HH:mm"
-
-    //         const recipeWithId: Recipe = {
-    //           ...recipe,
-    //           id: uuidv4(),
-    //           createdAt: createdAt,
-    //         };
-
-    //         this.recipeService.addRecipe(recipeWithId).subscribe(() => {
-    //           console.log(`Added: ${recipeWithId.title} at ${createdAt}`);
-    //         });
-    //       }, index * 30000); // Delay each by 2 seconds (2000ms)
-    //     } else {
-    //       console.log(`Duplicate skipped: ${recipe.title}`);
-    //     }
-    //   });
-    // });
-  }
-
-  getIncomingRecipes(): Omit<Recipe, 'id'>[] {
-    const now = new Date();
-    const formattedDateTime = `${now.getFullYear()}-${String(
-      now.getMonth() + 1
-    ).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')} ${String(
-      now.getHours()
-    ).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-
-    return [];
   }
 
   viewRecipeDetail(recipeId: string): void {
@@ -122,7 +80,7 @@ export class RecipeListComponent implements OnInit {
     return this.favorites.includes(recipeId);
   }
 
-  toggleLike(recipe: Recipe, event: MouseEvent): void {
+  toggleLike(recipe: Recipe, event: Event): void {
     event.stopPropagation();
     if (!this.userId) return;
 
@@ -199,9 +157,45 @@ export class RecipeListComponent implements OnInit {
     }
   }
 
-  getPageArray(): number[] {
-    return Array(this.totalPages)
-      .fill(0)
-      .map((_, i) => i + 1);
+  getPageArray(): (number | string)[] {
+    const pages: (number | string)[] = [];
+    const totalPages = this.totalPages;
+
+    if (totalPages <= 6) {
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(i);
+      }
+    } else {
+      pages.push(1);
+
+      if (this.currentPage > 3) {
+        pages.push('...');
+      }
+
+      const startPage = Math.max(2, this.currentPage - 1);
+      const endPage = Math.min(totalPages - 1, this.currentPage + 1);
+
+      for (let i = startPage; i <= endPage; i++) {
+        pages.push(i);
+      }
+
+      if (this.currentPage < totalPages - 2) {
+        pages.push('...');
+      }
+
+      pages.push(totalPages);
+    }
+
+    return pages;
+  }
+
+  trackByPage(index: number, item: number | string): any {
+    return item;
+  }
+  onPageClick(page: number | string): void {
+    if (page !== '...') {
+      this.changePage(page as number);
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 }

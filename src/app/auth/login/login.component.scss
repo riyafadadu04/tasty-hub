@@ -71,3 +71,15 @@
     color: $color-secondary;
   }
 }
+
+@media only screen and (max-width: 40.46em) {
+  .form {
+    width: 50rem;
+  }
+}
+
+@media only screen and (max-width: 21em) {
+  .form {
+    width: 40rem;
+  }
+}

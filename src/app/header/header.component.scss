@@ -12,12 +12,14 @@ mat-toolbar {
   button {
     color: $color-secondary;
     font-size: 1.2rem;
-    padding: 1rem 1.2rem;
+    padding: 1.2rem 2.4rem;
 
     mat-icon {
       width: 2rem;
       height: auto;
       font-size: 2rem;
+      margin-left: 0;
+      margin-right: 0;
     }
   }
 
@@ -39,6 +41,10 @@ mat-toolbar {
   padding: 0.5rem 0;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   min-width: 20rem;
+
+  .mat-mdc-menu-content {
+    padding: 0 !important;
+  }
 }
 
 ::ng-deep .mat-mdc-menu-item {
@@ -55,5 +61,17 @@ mat-toolbar {
 
   .mat-icon {
     margin-right: 0.5rem;
+  }
+
+  .mat-mdc-menu-item-text {
+    font-size: 1.2rem !important;
+  }
+}
+
+@media only screen and (max-width: 21em) {
+  mat-toolbar {
+    button {
+      padding: 1rem;
+    }
   }
 }

@@ -144,3 +144,59 @@
     }
   }
 }
+
+@media only screen and (max-width: 64em) {
+  .container {
+    width: 90%;
+  }
+}
+
+@media only screen and (max-width: 48em) {
+  .container {
+    padding-top: 4rem;
+    width: 95%;
+  }
+}
+
+@media only screen and (max-width: 40.46em) {
+  .container {
+    .form {
+      mat-label {
+        font-size: 1.4rem;
+      }
+      mat-radio-group mat-radio-button {
+        .mdc-label {
+          background: #000;
+          font-size: 1.4rem !important;
+        }
+      }
+      .input-chip {
+        margin-bottom: 1rem;
+        ::ng-deep .mat-mdc-form-field-infix {
+          flex-direction: column;
+        }
+        mat-error {
+          font-size: 1.2rem;
+        }
+        &__field {
+          margin: 2rem 0;
+        }
+        input {
+          font-size: 1.4rem;
+        }
+      }
+      .ingredient__heading {
+        font-size: 1.4rem;
+      }
+      .ingredient__list {
+        gap: 1rem;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 21em) {
+  .container {
+    width: 100%;
+  }
+}

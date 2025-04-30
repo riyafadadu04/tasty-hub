@@ -73,6 +73,8 @@
         .mat-icon-circle {
           color: $color-secondary;
           font-size: 2.5rem;
+          display: flex;
+          align-items: center;
         }
         .servings {
           font-size: 2rem;
@@ -100,6 +102,9 @@
 
         .name {
           margin-right: 0.5rem;
+        }
+        .ing-quantity {
+          min-width: 8rem;
         }
       }
     }
@@ -135,5 +140,31 @@
 
   ::ng-deep .custom-spinner circle {
     stroke: $color-secondary !important;
+  }
+}
+
+@media only screen and (max-width: 64em) {
+  .container {
+    width: 80%;
+  }
+}
+
+@media only screen and (max-width: 48em) {
+  .container {
+    width: 90%;
+  }
+}
+
+@media only screen and (max-width: 40.46em) {
+  .container {
+    width: 100%;
+  }
+}
+
+@media only screen and (max-width: 21em) {
+  .container {
+    .recipe__ingredient__ing {
+      grid-template-columns: repeat(1, 1fr);
+    }
   }
 }

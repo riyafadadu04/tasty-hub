@@ -11,6 +11,7 @@ import { AuthService } from '../auth.service';
 import { MatError, MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-login',
@@ -31,7 +32,11 @@ import { MatButtonModule } from '@angular/material/button';
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
 
-  constructor(private router: Router, private authService: AuthService) {}
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+    private snackBar: MatSnackBar
+  ) {}
 
   ngOnInit(): void {
     if (this.authService.isLoggedIn()) {
@@ -50,6 +55,10 @@ export class LoginComponent implements OnInit {
     });
   }
 
+  openSnackBar() {
+    this.snackBar.open('Invalid Email and Password!');
+  }
+
   onLogin() {
     if (this.loginForm.valid) {
       const { email, password } = this.loginForm.value;
@@ -60,6 +69,7 @@ export class LoginComponent implements OnInit {
           this.router.navigate(['/recipe']);
         },
         error: (err) => {
+          this.openSnackBar();
           console.error('Login failed:', err);
         },
       });

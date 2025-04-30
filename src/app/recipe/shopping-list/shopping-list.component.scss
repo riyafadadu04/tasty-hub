@@ -17,20 +17,37 @@
   gap: 1.2rem;
   width: 80%;
 
+  .loader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+
+    ::ng-deep .custom-spinner circle {
+      stroke: $color-secondary !important;
+    }
+  }
+
+  .no-recipe {
+    text-align: center;
+    font-size: 1.4rem;
+    padding: 2rem;
+  }
+
   .header {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     width: 100%;
     padding: 2.6rem 0 0 0;
     .heading {
       font-size: 2.5rem;
       text-align: center;
       color: $color-secondary;
-      margin-bottom: 2rem;
     }
     button {
       font-size: 1.2rem;
-      padding: 1rem 2rem;
+      padding: 1.2rem 3rem;
     }
   }
 
@@ -128,10 +145,20 @@
     mat-row {
       display: table-row;
     }
+    button {
+      font-size: 1.2rem;
+      padding: 1.2rem;
 
-    mat-icon {
-      color: $color-secondary;
+      mat-icon {
+        color: $color-secondary;
+        width: 2rem;
+        height: auto;
+        font-size: 2rem;
+        margin-left: 0;
+        margin-right: 0;
+      }
     }
+
     th {
       color: $color-secondary;
       background: $color-primary;
@@ -180,3 +207,59 @@
     }
   }
 }
+
+@media only screen and (max-width: 64em) {
+  .container {
+    width: 90%;
+
+    table {
+      mat-icon {
+        color: $color-secondary;
+      }
+      th {
+        font-size: 1.3rem;
+      }
+
+      td {
+        font-size: 1.3rem;
+      }
+      .th-name {
+        width: 50rem;
+      }
+      .th-unit {
+        width: 20rem;
+      }
+      .th-action {
+        width: 20rem;
+      }
+      .table-input {
+        font-size: 1.3rem;
+      }
+
+      mat-form-field {
+        width: 60%;
+
+        ::ng-deep .mat-mdc-text-field-wrapper {
+          height: 3rem;
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 48em) {
+  .container {
+    padding-top: 4rem;
+    width: 95%;
+  }
+}
+
+// @media only screen and (max-width: 40.46em) {
+//   .container {
+//   }
+// }
+
+// @media only screen and (max-width: 21em) {
+//   .container {
+//   }
+// }

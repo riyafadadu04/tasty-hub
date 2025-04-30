@@ -1,29 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { RecipeService } from '../recipe.service';
 import { Recipe } from '../recipe.model';
 import { NavigationEnd, Router } from '@angular/router';
 import { NgFor, NgIf } from '@angular/common';
 import { AuthService } from '../../auth/auth.service';
 import { MatIconModule } from '@angular/material/icon';
-import { MatButton, MatButtonModule } from '@angular/material/button';
+import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { filter } from 'rxjs';
-
-interface AppUser {
-  email: string;
-  favorites: string[];
-  myrecipes: string[];
-  name: string;
-  password: string;
-  shoppingList: {
-    id: string;
-    name: string;
-    quantity: number;
-    unit: string;
-  }[];
-  userId: string;
-}
 
 @Component({
   selector: 'app-my-recipe',
@@ -44,49 +28,38 @@ export class MyRecipeComponent implements OnInit {
   userId: string = '';
   userData: any;
   isLoading = true;
+  isAddedRecipe = true;
 
   constructor(
     private recipeService: RecipeService,
     private authService: AuthService,
-    private dialog: MatDialog,
     private router: Router
-  ) {
-    this.router.events
-      .pipe(filter((event) => event instanceof NavigationEnd))
-      .subscribe((event) => {
-        if (this.router.url === '/myRecipe') {
-          this.loadMyRecipes();
-        }
-      });
-  }
+  ) {}
 
   ngOnInit(): void {
-    this.loadMyRecipes();
     this.userId = this.authService.getCurrentUserId();
+    this.getMyRecipes(this.userId);
   }
 
-  loadMyRecipes() {
-    this.isLoading = true;
-    this.recipeData = [];
-    this.authService.getUserById(this.userId).subscribe((user) => {
-      const userValues = Object.values(user)[0] as AppUser;
-      this.userData = userValues;
-      this.myRecipes = userValues.myrecipes;
+  getMyRecipes(userId: string) {
+    this.recipeService.getMyRecipes(this.userId).subscribe((user) => {
+      this.myRecipes = user.myrecipes;
+      if (!this.myRecipes) {
+        this.isLoading = false;
+        this.isAddedRecipe = false;
+        return;
+      }
       this.myRecipes.forEach((recipe) => {
         this.recipeService.getRecipeById(recipe).subscribe((data) => {
           const isDuplicate = this.recipeData.some(
             (recipe) => recipe.id === data.id
           );
-
           if (!isDuplicate) {
             this.recipeData.push(data);
           }
-
-          if (this.recipeData.length === this.myRecipes.length) {
-            this.isLoading = false;
-          }
         });
       });
+      this.isLoading = false;
     });
   }
 

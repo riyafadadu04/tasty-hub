@@ -2,7 +2,27 @@
   <div class="container">
     <h2 class="heading">Favorite Recipes</h2>
 
-    <div class="recipe-container" *ngIf="paginatedRecipes.length; else noFavs">
+    <div *ngIf="isLoading" class="loader">
+      <mat-spinner diameter="60"></mat-spinner>
+    </div>
+
+    <div *ngIf="!isAddedFav && !isLoading" class="no-recipe">
+      <p>No Recipe... Please add your favorite recipe.</p>
+      <div>
+        <button
+          mat-raised-button
+          color="primary"
+          class="btn"
+          type="submit"
+          (click)="onBackToRecipe()"
+        >
+          <span>All Recipe</span>
+          <mat-icon>book</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <div class="recipe-container" *ngIf="!isLoading">
       <div
         *ngFor="let data of paginatedRecipes"
         (click)="viewRecipeDetail(data.id)"
@@ -17,7 +37,7 @@
                 matTooltip="Click to remove from favorites"
                 class="like-button"
                 [style.color]="isFavorite(data.id) ? 'red' : 'gray'"
-                (click)="toggleLike(data)"
+                (click)="toggleLike(data, $event)"
               >
                 {{ isFavorite(data.id) ? "favorite" : "favorite_border" }}
               </mat-icon>
@@ -43,33 +63,42 @@
       </div>
     </div>
 
-    <!-- No Favorites Message -->
-    <ng-template #noFavs>
-      <div class="loader"><mat-spinner diameter="60"></mat-spinner></div>
-    </ng-template>
-
     <!-- Pagination -->
     <div class="pagination" *ngIf="totalPages > 1">
+      <button (click)="changePage(1)" [disabled]="currentPage === 1">
+        <mat-icon>first_page</mat-icon>
+      </button>
+
       <button
         (click)="changePage(currentPage - 1)"
         [disabled]="currentPage === 1"
       >
-        Previous
+        <mat-icon>keyboard_arrow_left</mat-icon>
       </button>
 
-      <button
-        *ngFor="let page of getPageArray()"
-        (click)="changePage(page)"
-        [class.active]="currentPage === page"
-      >
-        {{ page }}
-      </button>
+      <div *ngFor="let page of getPageArray() as pages; trackBy: trackByPage">
+        <div class="page-dots" *ngIf="page === '...'">{{ page }}</div>
+        <button
+          *ngIf="page !== '...'"
+          [class.active]="currentPage === page"
+          (click)="onPageClick(page)"
+        >
+          {{ page }}
+        </button>
+      </div>
 
       <button
         (click)="changePage(currentPage + 1)"
         [disabled]="currentPage === totalPages"
       >
-        Next
+        <mat-icon>keyboard_arrow_right</mat-icon>
+      </button>
+
+      <button
+        (click)="changePage(totalPages)"
+        [disabled]="currentPage === totalPages"
+      >
+        <mat-icon>last_page</mat-icon>
       </button>
     </div>
   </div>

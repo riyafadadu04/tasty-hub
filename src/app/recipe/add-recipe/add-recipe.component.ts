@@ -146,8 +146,8 @@ export class AddRecipeComponent implements OnInit {
 
   submitRecipe(): void {
     if (this.recipeForm.invalid) {
-      this.recipeForm.markAllAsTouched(); // highlight invalid fields
-      return; // stop here if form is invalid
+      this.recipeForm.markAllAsTouched();
+      return;
     }
 
     const value = this.recipeForm.value;
@@ -171,7 +171,8 @@ export class AddRecipeComponent implements OnInit {
       this.resetForm();
       this.recipeForm.setErrors(null);
       alert('Recipe added!');
-      this.router.navigate(['/myRecipe']);
+      // window.location.reload();
+      // this.router.navigate(['/myRecipe']);
     });
   }
 

@@ -55,7 +55,15 @@
       </form>
     </div>
 
-    <div *ngIf="ingredients?.length" class="ingredients-table-wrapper">
+    <div *ngIf="isLoading" class="loader">
+      <mat-spinner diameter="60"></mat-spinner>
+    </div>
+
+    <div *ngIf="!isAddedIng && !isLoading" class="no-recipe">
+      <p>Please add your shopping list item.</p>
+    </div>
+
+    <div *ngIf="isAddedIng && !isLoading" class="ingredients-table-wrapper">
       <table mat-table [dataSource]="ingredients" class="mat-elevation-z2">
         <!-- Name Column -->
         <ng-container matColumnDef="name">

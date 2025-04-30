@@ -9,6 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Router } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-favorites',
@@ -19,6 +20,7 @@ import { Router } from '@angular/router';
     NgIf,
     MatIconModule,
     MatTooltipModule,
+    MatButtonModule,
     MatProgressSpinnerModule,
   ],
   templateUrl: './favorites.component.html',
@@ -30,6 +32,8 @@ export class FavoritesComponent implements OnInit {
   itemsPerPage = 12;
   favorites: string[] = [];
   userId: string | null = null;
+  isLoading = true;
+  isAddedFav = true;
 
   constructor(
     private recipeService: RecipeService,
@@ -39,27 +43,36 @@ export class FavoritesComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.isLoading = true;
     this.userId = this.authService.getCurrentUserId();
+    this.getFavRecipe(this.userId);
+  }
 
+  getFavRecipe(userId: string) {
     if (this.userId) {
       this.recipeService.getFavoriteRecipes(this.userId).subscribe((res) => {
-        this.favorites = res?.favorites || [];
-        if (this.favorites.length) {
-          this.favorites.forEach((fav) => {
-            this.recipeService.getRecipeById(fav).subscribe((recipe) => {
-              if (recipe) this.dataList.push(recipe);
-            });
-          });
+        this.favorites = res.favorites;
+        if (!this.favorites) {
+          this.isLoading = false;
+          this.isAddedFav = false;
+          return;
         }
+        this.favorites.forEach((fav) => {
+          this.recipeService.getRecipeById(fav).subscribe((recipe) => {
+            if (recipe) this.dataList.push(recipe);
+          });
+        });
       });
     }
+    this.isLoading = false;
   }
 
   isFavorite(recipeId: string): boolean {
     return this.favorites.includes(recipeId);
   }
 
-  toggleLike(recipe: Recipe): void {
+  toggleLike(recipe: Recipe, event: Event): void {
+    event.stopPropagation();
     if (!this.userId) return;
 
     const index = this.favorites.indexOf(recipe.id);
@@ -109,13 +122,53 @@ export class FavoritesComponent implements OnInit {
     }
   }
 
-  getPageArray(): number[] {
-    return Array(this.totalPages)
-      .fill(0)
-      .map((_, i) => i + 1);
+  getPageArray(): (number | string)[] {
+    const pages: (number | string)[] = [];
+    const totalPages = this.totalPages;
+
+    if (totalPages <= 6) {
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(i);
+      }
+    } else {
+      pages.push(1);
+
+      if (this.currentPage > 3) {
+        pages.push('...');
+      }
+
+      const startPage = Math.max(2, this.currentPage - 1);
+      const endPage = Math.min(totalPages - 1, this.currentPage + 1);
+
+      for (let i = startPage; i <= endPage; i++) {
+        pages.push(i);
+      }
+
+      if (this.currentPage < totalPages - 2) {
+        pages.push('...');
+      }
+
+      pages.push(totalPages);
+    }
+
+    return pages;
+  }
+
+  trackByPage(index: number, item: number | string): any {
+    return item;
+  }
+  onPageClick(page: number | string): void {
+    if (page !== '...') {
+      this.changePage(page as number);
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   viewRecipeDetail(recipeId: string): void {
     this.router.navigate(['/recipe', recipeId]);
+  }
+
+  onBackToRecipe() {
+    this.router.navigate(['/recipe']);
   }
 }

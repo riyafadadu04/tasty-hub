@@ -5,7 +5,7 @@
   justify-content: center;
   align-items: center;
   overflow: hidden;
-  padding: 6.4rem 0;
+  padding: 6.4rem 0 0 0;
 }
 .container {
   width: 100%;
@@ -127,8 +127,16 @@
     margin-top: 2rem;
     display: flex;
     justify-content: center;
+    align-items: center;
     gap: 0.5rem;
     flex-wrap: wrap;
+
+    .page-dots {
+      font-size: 1.8rem;
+      padding: 0 1rem;
+      display: flex;
+      align-items: center;
+    }
 
     button {
       padding: 0.4rem 0.8rem;
@@ -137,6 +145,16 @@
       cursor: pointer;
       border-radius: 4px;
       transition: all 0.3s ease;
+      font-size: 1.2rem;
+      padding: 1.2rem;
+
+      mat-icon {
+        width: 2rem;
+        height: auto;
+        font-size: 2rem;
+        margin-left: 0;
+        margin-right: 0;
+      }
 
       &:disabled {
         opacity: 0.5;
@@ -144,8 +162,81 @@
       }
 
       &.active {
-        background-color: $color-primary;
+        background-color: $color-secondary;
         color: white;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 64em) {
+  .container {
+    .recipe-container {
+      gap: 1.5rem;
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+}
+
+@media only screen and (max-width: 48em) {
+  .container {
+    padding-top: 4rem;
+  }
+}
+
+@media only screen and (max-width: 40.46em) {
+  .container {
+    .recipe-container {
+      gap: 1rem;
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .filter {
+      mat-label {
+        font-size: 1.4rem;
+      }
+
+      &__search {
+        flex: 1 1 18rem;
+      }
+
+      &__sort {
+        width: 18rem;
+        font-size: 1.4rem;
+      }
+
+      mat-form-field {
+        input {
+          font-size: 1.4rem;
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 21em) {
+  .container {
+    .recipe-container {
+      grid-template-columns: repeat(1, 1fr);
+    }
+    .filter {
+      gap: 0;
+      &__search {
+        flex: 1 1 auto;
+      }
+
+      &__sort {
+        width: 100%;
+      }
+    }
+    .pagination {
+      button {
+        font-size: 1rem;
+        padding: 1rem;
+
+        mat-icon {
+          width: 2rem;
+          font-size: 1.2rem;
+        }
       }
     }
   }

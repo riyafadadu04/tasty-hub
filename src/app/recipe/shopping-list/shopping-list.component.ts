@@ -2,14 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { Ingredient } from '../recipe.model';
 import { RecipeService } from '../recipe.service';
 import { AuthService } from '../../auth/auth.service';
-import { NgFor, NgIf } from '@angular/common';
+import { NgIf } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
-import { ChangeDetectorRef } from '@angular/core';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-shopping-list',
@@ -23,6 +23,7 @@ import { ChangeDetectorRef } from '@angular/core';
     MatIcon,
     MatIconModule,
     MatTableModule,
+    MatProgressSpinnerModule,
   ],
   standalone: true,
   templateUrl: './shopping-list.component.html',
@@ -33,6 +34,8 @@ export class ShoppingListComponent implements OnInit {
   ingredients: Ingredient[] = [];
   showForm: boolean = false;
   displayedColumns: string[] = ['name', 'quantity', 'unit', 'actions'];
+  isLoading = true;
+  isAddedIng = true;
 
   ingredientForm: Ingredient = {
     name: '',
@@ -49,15 +52,24 @@ export class ShoppingListComponent implements OnInit {
 
   constructor(
     private recipeService: RecipeService,
-    private authService: AuthService,
-    private cdr: ChangeDetectorRef // Inject ChangeDetectorRef
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
     this.userId = this.authService.getCurrentUserId();
+    this.getAllShoppingList(this.userId);
+  }
+
+  getAllShoppingList(userId: string) {
     this.recipeService.getShoppingList(this.userId).subscribe((data) => {
+      if (data.length === 0) {
+        this.isAddedIng = false;
+        this.isLoading = false;
+        return;
+      }
       this.ingredients = data;
-      this.cdr.detectChanges(); // Ensure the view is updated after receiving the data
+      this.isAddedIng = true;
+      this.isLoading = false;
     });
   }
 
@@ -71,19 +83,19 @@ export class ShoppingListComponent implements OnInit {
   }
 
   onAddIngredient() {
+    this.isLoading = true;
+    this.isAddedIng = true;
+
     const newIngredient: Ingredient = {
       id: Date.now().toString(),
       ...this.ingredientForm,
     };
 
-    // Add the new ingredient to the list and update the UI
-    this.ingredients.push(newIngredient);
-
-    // Call the service to add the ingredient to the shopping list
     this.recipeService
       .addIngredientToShoppingList(this.userId, newIngredient)
       .subscribe(() => {
-        this.cdr.detectChanges(); // Manually trigger change detection after adding
+        this.getAllShoppingList(this.userId);
+        this.isLoading = false;
       });
 
     this.toggleForm();
@@ -99,19 +111,21 @@ export class ShoppingListComponent implements OnInit {
   }
 
   saveEdit(id: string) {
+    this.isLoading = true;
+    this.isAddedIng = true;
+
     const index = this.ingredients.findIndex((ing) => ing.id === id);
     if (index !== -1) {
-      // Update the ingredient in the array
       this.ingredients[index] = {
         id,
         ...this.editForm,
       };
 
-      // Update the ingredient on the backend
       this.recipeService
         .updateIngredientInShoppingList(this.userId, this.ingredients[index])
         .subscribe(() => {
-          this.cdr.detectChanges(); // Ensure the changes are reflected immediately
+          this.getAllShoppingList(this.userId);
+          this.isLoading = false;
         });
     }
 
@@ -121,14 +135,16 @@ export class ShoppingListComponent implements OnInit {
   removeIngredient(id?: string) {
     if (!id) return;
 
-    // Remove the ingredient from the local list
+    this.isLoading = true;
+    this.isAddedIng = true;
     this.ingredients = this.ingredients.filter((ing) => ing.id !== id);
 
-    // Call the service to remove the ingredient from the shopping list
     this.recipeService
       .removeIngredientFromShoppingList(this.userId, id)
       .subscribe(() => {
-        this.cdr.detectChanges(); // Ensure the UI is updated after removal
+        this.isAddedIng = false;
+        this.getAllShoppingList(this.userId);
+        this.isLoading = false;
       });
   }
 }

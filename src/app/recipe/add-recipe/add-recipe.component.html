@@ -53,7 +53,10 @@
         </mat-error>
       </mat-form-field>
 
-      <mat-form-field appearance="outline" class="example-form-field">
+      <mat-form-field
+        appearance="outline"
+        class="input-chip example-form-field"
+      >
         <mat-label>Tags</mat-label>
         <mat-chip-grid #chipGrid aria-label="Tags list">
           <mat-chip-row
@@ -66,12 +69,14 @@
             </button>
           </mat-chip-row>
         </mat-chip-grid>
-        <input
-          placeholder="New tag..."
-          [matChipInputFor]="chipGrid"
-          [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-          (matChipInputTokenEnd)="addTag($event)"
-        />
+        <div class="input-chip__field">
+          <input
+            placeholder="New tag..."
+            [matChipInputFor]="chipGrid"
+            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+            (matChipInputTokenEnd)="addTag($event)"
+          />
+        </div>
       </mat-form-field>
 
       <mat-radio-group formControlName="imageType">

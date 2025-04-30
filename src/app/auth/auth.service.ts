@@ -169,11 +169,8 @@ export class AuthService {
   }
 
   getUserById(userId: string): Observable<any> {
-    return this.http.get<any>(`${this.dbUrl}/users/${userId}.json`).pipe(
-      catchError((error) => {
-        console.error('Error fetching user:', error);
-        return throwError(() => 'Failed to fetch user data.');
-      })
+    return this.http.get<{ myrecipes?: string[] }>(
+      `${this.dbUrl}/users/${userId}.json`
     );
   }
 }

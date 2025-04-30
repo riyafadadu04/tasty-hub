@@ -53,11 +53,13 @@
           >
             <mat-icon>check</mat-icon>
             <span class="name">{{ ing.name }}</span>
-            <span class="name" *ngIf="ing.quantity">
-              - {{ adjustedQuantity(ing.quantity) }}
-            </span>
-            <span *ngIf="ing.unit">
-              {{ ing.unit }}
+            <span class="ing-quantity">
+              <span class="name" *ngIf="ing.quantity">
+                - {{ adjustedQuantity(ing.quantity) }}
+              </span>
+              <span *ngIf="ing.unit">
+                {{ ing.unit }}
+              </span>
             </span>
           </div>
         </div>

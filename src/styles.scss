@@ -2,6 +2,7 @@
 $color-primary-light: #faf9fd;
 $color-primary: #d7e3ff;
 $color-secondary: #034184;
+
 * {
   margin: 0;
   padding: 0;
@@ -16,6 +17,19 @@ $color-secondary: #034184;
 html {
   box-sizing: border-box;
   font-size: 62.5%;
+
+  @media only screen and (max-width: 64em) {
+    font-size: 56.25%;
+  }
+  // @media only screen and (max-width: 48em) {
+  //   font-size: 43%;
+  // }
+  // @media only screen and (max-width: 35.25em) {
+  //   font-size: 37.5%;
+  // }
+  @media only screen and (max-width: 40.46em) {
+    font-size: 43%;
+  }
 }
 
 html,
